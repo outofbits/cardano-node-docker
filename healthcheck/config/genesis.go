@@ -7,13 +7,16 @@ import (
     "time"
 )
 
-type genesis struct {
+// Genesis configuration details that are needed by this health check application.
+type Genesis struct {
     GenesisBlockCreationTime time.Time `json:"systemStart"`
     SlotsPerEpoch            uint64    `json:"epochLength"`
     SlotDurationInS          uint64    `json:"slotLength"`
 }
 
-func ParseGenesis(genesisFilePath string) (*genesis, error) {
+// ParseGenesis parses the Genesis file at the given filepath. Returns the Genesis, if the parsing was successful.
+// Otherwise an error will be returned.
+func ParseGenesis(genesisFilePath string) (*Genesis, error) {
     genesisFile, err := os.Open(genesisFilePath)
     if err != nil {
         return nil, err
@@ -22,7 +25,7 @@ func ParseGenesis(genesisFilePath string) (*genesis, error) {
     if err != nil {
         return nil, err
     }
-    var genesis genesis
+    var genesis Genesis
     err = json.Unmarshal(genesisData, &genesis)
     if err != nil {
         return nil, nil

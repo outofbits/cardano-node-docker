@@ -10,18 +10,16 @@ RUN dnf install -y autoconf \
 	ncurses-compat-libs \
 	&& dnf clean all
 
-# install library libsodium
+# clone & install library libsodium
 RUN git clone https://github.com/input-output-hk/libsodium.git
-
 WORKDIR libsodium
-
-RUN git checkout 66f017f1
+RUN git checkout 66f017f1 --quiet
 RUN ./autogen.sh && ./configure
 RUN make && make check && make install
-
-# remove the source code of libsodium
 RUN rm -rf ../libsodium
+WORKDIR /
 
+# set environment variables for installed libsodium
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 

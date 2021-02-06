@@ -1,24 +1,22 @@
 # Compiler Image (see BaseCompiler.Dockerfile for base image)
 # --------------------------------------------------------------------------
-FROM adalove/centos:8-ghc8.6.5-c3.2.0.0 AS compiler
+FROM adalove/centos:8-ghc8.10.3-c3.2.0.0 AS compiler
 
-# compile cardano-node
 ARG NODE_VERSION
 ARG NODE_REPOSITORY
 ARG NODE_BRANCH
 
+# clone git repository
 RUN git clone -b $NODE_BRANCH --recurse-submodules $NODE_REPOSITORY cardano-node
-
-WORKDIR cardano-node
-
+WORKDIR /cardano-node
 RUN git fetch --all --tags
 RUN git checkout tags/$NODE_VERSION --quiet
 
+# compile cardano-node
 RUN mkdir -p /binaries/
 RUN cabal build all
-# move binaries
-RUN cp -L "/libsodium/cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-cli-${NODE_VERSION}/x/cardano-cli/build/cardano-cli/cardano-cli" /binaries/
-RUN cp -L "/libsodium//cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-node-${NODE_VERSION}/x/cardano-node/build/cardano-node/cardano-node" /binaries/
+RUN cp $(find /cardano-node -name cardano-cli -type f -executable) /binaries/
+RUN cp $(find /cardano-node -name cardano-node -type f -executable) /binaries/
 
 # Compiler for the health check program written in Go
 # -------------------------------------------------------------------------
@@ -36,11 +34,10 @@ RUN mv healthcheck /binaries/
 FROM adalove/centos:8
 
 # Documentation
-ENV DFILE_VERSION "1.5"
+ENV DFILE_VERSION "1.6"
 
-# Add Lovelace user
-RUN groupadd --gid 1402 cardano
-RUN useradd -m --uid 1402 --gid 1402 lovelace
+# add lovelace user
+RUN useradd -m --uid 1402 lovelace
 
 # Documentation
 LABEL maintainer="Kevin Haller <keivn.haller@outofbits.com>"
