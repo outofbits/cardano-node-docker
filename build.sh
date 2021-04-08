@@ -1,7 +1,12 @@
 #!/bin/bash
-DFILE_VERSION=1.6
+if [ -z $1 ]; then
+    echo "error: the cardano-node version is not specified (from which the image shall be built)"
+    echo "usage: $0 <cardano-node-version>"
+    exit 1
+fi
+
+DFILE_VERSION=1.7
 
 docker build --build-arg NODE_VERSION=$1 \
-           --build-arg NODE_REPOSITORY="https://github.com/input-output-hk/cardano-node" \
            --build-arg NODE_BRANCH="master" \
-           -t "adalove/cardano-node:$DFILE_VERSION-node$1" .
+           -t "adalove/cardano-node:$1" .
