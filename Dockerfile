@@ -2,14 +2,16 @@
 # --------------------------------------------------------------------------
 FROM adalove/ubuntu:20.04-ghc AS compiler
 
+ARG NODE_REPO
 ARG NODE_BRANCH
 ARG NODE_VERSION
 
 WORKDIR /
-RUN git clone "https://github.com/input-output-hk/cardano-node.git" cardano-node -b $NODE_BRANCH --recurse-submodules && \
+RUN git clone $NODE_REPO cardano-node -b $NODE_BRANCH --recurse-submodules && \
     cd cardano-node && \
     git fetch --all --tags && \
-    git checkout tags/$NODE_VERSION --quiet
+    git checkout tags/$NODE_VERSION --quiet && \
+    git submodule update --init
 RUN cd cardano-node && \ 
     cabal update && \
     cabal build all && \
