@@ -1,9 +1,6 @@
-ARG GHC_VERSION=8.10.3
-ARG CABAL_VERSION=3.4
-
 # Compiler Image
 # --------------------------------------------------------------------------
-FROM adalove/ubuntu:20.04-ghc${GHC_VERSION}-c${CABAL_VERSION} AS compiler
+FROM adalove/ubuntu:20.04-ghc AS compiler
 
 ARG NODE_BRANCH
 ARG NODE_VERSION
@@ -34,7 +31,7 @@ RUN mkdir -p /binaries/ && \
 # -------------------------------------------------------------------------
 FROM adalove/ubuntu:20.04
 
-ENV DFILE_VERSION "1.7"
+ENV DFILE_VERSION "u"
 
 # add lovelace user
 RUN groupadd -r lovelace --gid 1402 && \
@@ -44,7 +41,7 @@ USER lovelace
 
 # Documentation
 LABEL maintainer="Kevin Haller <keivn.haller@outofbits.com>"
-LABEL version="${DFILE_VERSION}-node${NODE_VERSION}"
+LABEL version="${DFILE_VERSION}${NODE_VERSION}"
 LABEL description="Blockchain node for Cardano (implemented in Haskell)."
 
 COPY --from=compiler /binaries/cardano-node /usr/local/bin/
