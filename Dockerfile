@@ -26,7 +26,8 @@ FROM golang:1.15 AS healthCheckCompiler
 COPY healthcheck healthcheck
 WORKDIR healthcheck
 RUN mkdir -p /binaries/ && \
-    go mod vendor && go build && \
+    go mod vendor && \
+    go build && \
     mv healthcheck /binaries/
 
 # Main Image
