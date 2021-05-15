@@ -1,8 +1,9 @@
 # Cardano Node Dockerfile
 
 This repository maintains an unofficial Dockerfile for the [cardano-node](https://github.com/input-output-hk/cardano-node)
-software based on CentOS 8. It follows the [guide](https://github.com/input-output-hk/cardano-tutorials/blob/master/node-setup/000_install.md)
-by IOHK outlining how to compile the cardano node software on Linux distributions.
+software based on Ubuntu 20.04. It follows the [guide](https://github.com/input-output-hk/cardano-tutorials/blob/master/node-setup/000_install.md)
+by IOHK outlining how to compile the cardano node software on Linux distributions. The Dockerfile for the Ubuntu base images are located in another 
+repository ([outofbits/cardano-base-images](https://github.com/outofbits/cardano-base-images)).
 
 ## Building
 
